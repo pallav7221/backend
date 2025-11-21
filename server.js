@@ -1,5 +1,5 @@
+import 'dotenv/config';
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
@@ -9,10 +9,7 @@ import errorHandler from './middleware/errorHandler.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
 
-// Load env vars
-dotenv.config();
-
-// Connect to database
+// Connect to database (dotenv loaded via top-level side-effect import)
 connectDB();
 
 const app = express();
