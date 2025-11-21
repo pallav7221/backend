@@ -34,6 +34,12 @@ app.use('/api/applications', applicationRoutes);
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Raw Swagger JSON (useful for tools or fetching the spec programmatically)
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
 // Error handler
 app.use(errorHandler);
 
