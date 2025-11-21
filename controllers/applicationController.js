@@ -58,11 +58,25 @@ export const createApplication = async (req, res) => {
 // @access  Private
 export const getMyApplications = async (req, res) => {
   try {
-    const applications = await Application.find({ user: req.user._id })
-      .populate('pet', 'name species breed image status')
-      .sort({ createdAt: -1 });
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    res.json(applications);
+    const query = { user: req.user._id };
+
+    const total = await Application.countDocuments(query);
+    const applications = await Application.find(query)
+      .populate('pet', 'name species breed image status')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      applications,
+      page,
+      pages: Math.ceil(total / limit),
+      total,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
