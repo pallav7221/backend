@@ -1,4 +1,9 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const options = {
   definition: {
@@ -14,7 +19,11 @@ const options = {
       },
     ],
   },
-  apis: ['./routes/*.js', './models/*.js'],
+  // Use absolute paths so swagger-jsdoc reliably finds files regardless of CWD
+  apis: [
+    path.join(__dirname, '..', 'routes', '**', '*.js'),
+    path.join(__dirname, '..', 'models', '**', '*.js'),
+  ],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
